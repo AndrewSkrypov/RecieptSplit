@@ -7,20 +7,52 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Node.js
+node_modules/
+dist/
+dist-ssr/
 *.local
+
+# TypeScript
+*.tsbuildinfo
+
+# React
+build/
+.cache/
+
+# Docker
+*.tar
+docker-compose.override.yml
+.env
+.env.local
+.env.*.local
+
+# Output
 myapp.tar
 project_all.tar
+
+# Go
+go_server/main
+go_server/*.exe
+go_server/*.out
+go_server/go.sum
+go_server/go.mod~
+**/*.test
+**/*.tmp
+**/__debug_bin
+**/coverage.out
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# MacOS-specific
+.AppleDouble
+.LSOverride
