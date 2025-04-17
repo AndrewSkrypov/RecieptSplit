@@ -7,12 +7,44 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Here you would typically handle the login logic
+  //   console.log('Login submitted:', { email, password });
+  //   navigate('/profile');
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    console.log('Login submitted:', { email, password });
-    navigate('/profile');
+
+    try {
+      const response = await fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+
+        // Сохраняем токен в localStorage
+        localStorage.setItem('token', data.token);
+
+        alert('Успешный вход!');
+        navigate('/profile');
+      } else {
+        const error = await response.text();
+        alert(`Ошибка входа: ${error}`);
+      }
+    } catch (err) {
+      console.error('Ошибка при входе:', err);
+      alert('Произошла ошибка при входе');
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-[#f2fff5] flex items-center justify-center p-4">
@@ -26,17 +58,17 @@ function Login() {
             Назад
           </button>
         </div>
-        <div className="relative mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Вход в аккаунт</h1>
-          <p className="text-gray-500 mt-1">Войдите, чтобы продолжить</p>
 
-          <img
+        <div className="relative mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Вход в аккаунт</h1>
+        <p className="text-gray-500 mt-1">Войдите, чтобы продолжить</p>
+        <img
             src="/avatars/avatar3.jpg"
             alt="котик"
-            className="w-16 h-16 rounded-full absolute right-8 top-1/2 -translate-y-1/2"
+            className="w-16 h-16 rounded-full absolute right-0 top-1/2 -translate-y-1/2"
           />
-        </div>
-
+          </div>
+        
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
@@ -45,13 +77,13 @@ function Login() {
                 Email
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
-                placeholder="your@email.com"
-                required
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  placeholder="your@email.com"
+                  required
               />
             </div>
 
@@ -60,30 +92,30 @@ function Login() {
                 Пароль
               </label>
               <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
-                required
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  required
               />
             </div>
 
             <button
-              type="submit"
-              className="w-full bg-green-500 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-600 transition-colors"
+                type="submit"
+                className="w-full bg-green-500 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-600 transition-colors"
             >
               Войти
-              <ArrowRight size={20} />
+              <ArrowRight size={20}/>
             </button>
           </div>
         </form>
 
         <div className="mt-6 text-center text-sm">
           <span className="text-gray-600">Нет аккаунта? </span>
-          <button 
-            onClick={() => navigate('/register')}
-            className="text-green-500 hover:text-green-600 transition-colors"
+          <button
+              onClick={() => navigate('/register')}
+              className="text-green-500 hover:text-green-600 transition-colors"
           >
             Зарегистрироваться
           </button>

@@ -3,20 +3,51 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (password !== confirmPassword) {
+  //     alert('Пароли не совпадают');
+  //     return;
+  //   }
+  //   // Here you would typically handle the registration logic
+  //   console.log('Registration submitted:', { email, password });
+  //   navigate('/login');
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert('Пароли не совпадают');
       return;
     }
-    
-    console.log('Registration submitted:', { email, password });
-    navigate('/login');
+
+    try {
+      const response = await fetch('http://localhost:8080/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message); // "Пользователь зарегистрирован"
+        navigate('/login');
+      } else {
+        const error = await response.text();
+        alert(`Ошибка: ${error}`);
+      }
+    } catch (err) {
+      console.error('Ошибка при регистрации:', err);
+      alert('Произошла ошибка при регистрации');
+    }
   };
 
   return (
@@ -28,7 +59,6 @@ function Register() {
           alt="котик"
           className="w-16 h-16 rounded-full absolute top-8 right-8 shadow-md ring-4 ring-green-300"
         />
-        
         <div className="mb-8">
           <button 
             onClick={() => navigate(-1)}
@@ -40,22 +70,37 @@ function Register() {
         </div>
 
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Создайте аккаунт</h1>
-        <p className="text-gray-600 mb-6">Зарегистрируйтесь, чтобы начать пользоваться приложением</p>
+        <p className="text-gray-600 mb-6">Зарегистрируйтесь, и начните пользоваться приложением</p>
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm text-gray-700 mb-1">
+                Имя
+              </label>
+              <input
+                  type="name"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  placeholder="Ваше Имя"
+                  required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm text-gray-700 mb-1">
                 Email
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
-                placeholder="your@email.com"
-                required
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  placeholder="your@email.com"
+                  required
               />
             </div>
 
@@ -64,12 +109,12 @@ function Register() {
                 Пароль
               </label>
               <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
-                required
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  required
               />
             </div>
 
@@ -78,30 +123,30 @@ function Register() {
                 Повторите пароль
               </label>
               <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
-                required
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
+                  required
               />
             </div>
 
             <button
-              type="submit"
-              className="w-full bg-green-500 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-600 transition-colors"
+                type="submit"
+                className="w-full bg-green-500 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-600 transition-colors"
             >
               Зарегистрироваться
-              <ArrowRight size={20} />
+              <ArrowRight size={20}/>
             </button>
           </div>
         </form>
 
         <div className="mt-6 text-center text-sm">
           <span className="text-gray-600">Уже есть аккаунт? </span>
-          <button 
-            onClick={() => navigate('/login')}
-            className="text-green-500 hover:text-green-600 transition-colors"
+          <button
+              onClick={() => navigate('/login')}
+              className="text-green-500 hover:text-green-600 transition-colors"
           >
             Войти
           </button>

@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node-dev server.ts"
+    "dev": "tsx watch server.ts",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
     "strict": true
   },
   "devDependencies": {
-    "@types/express": "^5.0.1"
+    "@types/express": "^5.0.1",
+    "tsx": "^4.19.3"
   }
 }

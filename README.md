@@ -1,3 +1,157 @@
+# Build Docker
+docker build -t split-bill-app .
+
+# Launch
+docker run -p 4000:4000 split-bill-app
+
+# Or launching an image (myapp.tr )
+docker load < myapp.tar
+docker run -p 4000:4000 myapp
+
+# Import
+docker load -i project_all.tar
+docker-compose up
+
+
+
+# Account Separation — A web application for friendly payment
+
+Good afternoon! This is a modern application that allows users to conveniently and intuitively divide the bill at the table — in a cafe, restaurant or at a party. 
+
+---
+
+## The stack of technologies used
+
+### Frontend:
+
+- **React**
+  - A popular library for creating dynamic user interfaces.
+  - Support for a component-based approach, reuse, and fast rendering via the virtual DOM.
+
+- **TypeScript**
+- On top of JavaScript, adds strong typing, increasing code reliability and auto-completion in the editor.
+
+- **Tailwind CSS**
+is a utilitarian CSS framework that allows you to quickly and flexibly style the interface without writing custom CSS.
+  - Great for the style of our app thanks to the color tokens and neat appearance.
+
+- **React Router**
+  - Used for page transitions (`/login`, `/payment', `/register`, `/random`, etc.).
+
+- **Zustand**
+is a lightweight and fast alternative to Redux for global state management.
+  - Easy to use, easily expandable, and has native React support.
+
+- **Tesseract.js **
+- OCR (text recognition) from receipt images, which allows users to upload photos and automatically receive a list of dishes.
+
+- **socket.io-client**
+- Provides real-time operation: selecting dishes, updating the basket, and synchronizing participants.
+
+- **Lucide-react**
+  - Beautiful set of SVG icons, minimalistic and adaptive.
+
+- **React Swipeable**
+- Adds swipes by dish (to split portions between users).
+
+---
+
+### Backend:
+
+- **Node.js + Express**
+is a backend server that processes connections, tables, users, dishes, data sharing and synchronization.
+
+- **Socket.IO **
+- The server part for WebSockets — provides two-way communication between the client and the server.
+  - It is used for real-time work with tables, dishes and users.
+
+---
+
+### Auth API
+
+-  **Go + Gin**
+  - Easy and fast authorization and registration server.
+
+- **GORM**
+is an ORM for working with PostgreSQL.
+
+- **PostgreSQL**
+is a database for storing users and sessions.
+
+- **JWT**
+- Token authentication.
+
+### The server is written in Go and runs as a separate container (go_server).
+
+---
+
+### DevOps:
+
+- **Docker + Docker Compose**
+- Build, isolate, and run all project components.
+
+- **docker-compose up --build**
+ - localhost:4000 — client + Node backend + WebSocket
+
+ - localhost:8080 — Go backend (authorization)
+
+ - localhost:5432 — PostgreSQL
+
+
+
+
+
+### 📦 Data storage and structure
+
+- **Zustand**
+- Local status management (selected dishes, current user, tips, recognized dishes, etc.)
+- Ease of deployment to create a small project
+
+- **In-Memory State (on the server)**
+- `tableUsers` — list of users at the table
+- `tableDishes` — all selected and divided dishes
+
+- **PostgreSQL (via Go API)**
+- Users, Login, JWT
+
+---
+
+### Additional technologies and utilities:
+
+- **UUID (crypto.randomUUID)**
+- Generation of unique user IDs and dishes
+
+---
+
+### Why these particular technologies:
+
+**React + TypeScript** - Performance, scalability, ease of development 
+**Zustand** - Ease and speed of learning. It is sufficient to start the project. 
+**Tailwind CSS** - Speed of styling and responsive design, minimalism 
+**Socket.IO ** - Instant synchronization between participants at the table 
+**Tesseract.js** - Automatic recognition of dishes from the receipt without manual input 
+**React Swipeable** - Convenient interactions via swipes for UX 
+**Go** — speed, conciseness, stability in production
+**PostgreSQL** %
+
+ - Reliability and stability: PostgreSQL is used in production in many large projects, including fintech and government agencies.
+
+ - Powerful features: transactions, indexes, table relationships, validation, and extensions (e.g. pg_trgm, PostGIS).
+
+ - GORM compatibility: fully supported by the ORM library in Go, easy to connect and scale.
+
+ - Open source and active community: PostgreSQL is developing as an open source with a huge amount of documentation and a support community.
+
+---
+
+### In the plans:
+- Connecting the PostgreSQL database. The database has been prepared, and a separate server has been written for interaction. 
+- Integration of payment systems SBP, QR...
+- Storing the history of orders and users in the database
+
+
+
+
 # Сборка Докера
 docker build -t split-bill-app .
 
@@ -7,6 +161,10 @@ docker run -p 4000:4000 split-bill-app
 # Или запуск image (myapp.tr)
 docker load < myapp.tar
 docker run -p 4000:4000 myapp
+
+# Импорт
+docker load -i project_all.tar
+docker-compose up
 
 
 
@@ -63,6 +221,40 @@ docker run -p 4000:4000 myapp
 
 ---
 
+### Auth API
+
+-  **Go + Gin**
+  - Лёгкий и быстрый сервер авторизации и регистрации.
+
+- **GORM**
+  - ORM для работы с PostgreSQL.
+
+- **PostgreSQL**
+  - База данных для хранения пользователей и сессий.
+
+- **JWT**
+  - Аутентификация по токену.
+
+### Сервер написан на Go и запускается как отдельный контейнер (go_server).
+
+---
+
+### DevOps:
+
+- **Docker + Docker Compose**
+  - Сборка, изоляция, запуск всех компонентов проекта.
+
+- **docker-compose up --build**
+ - localhost:4000 — клиент + Node backend + WebSocket
+
+ - localhost:8080 — Go backend (авторизация)
+
+ - localhost:5432 — PostgreSQL
+
+
+
+
+
 ### 📦 Хранилище и структура данных
 
 - **Zustand**
@@ -73,7 +265,8 @@ docker run -p 4000:4000 myapp
   - `tableUsers` — список пользователей за столом
   - `tableDishes` — все выбранные и разделённые блюда
 
-> В будущем планируется переход на постоянное хранилище PostgreSQL.
+- **PostgreSQL (через Go API)**
+  - Пользователи, логин, JWT
 
 ---
 
@@ -92,6 +285,16 @@ docker run -p 4000:4000 myapp
 **Socket.IO** - Мгновенная синхронизация между участниками за столом 
 **Tesseract.js** - Автоматическое распознавание блюд с чека без ручного ввода 
 **React Swipeable** - Удобные взаимодействия через свайпы для UX 
+**Go** — скорость, лаконичность, стабильность в продакшене
+**PostgreSQL** %
+
+ - Надёжность и стабильность: PostgreSQL используется в продакшене во многих крупных проектах, включая финтех и госструктуры.
+
+ - Мощные возможности: транзакции, индексы, связи между таблицами, валидация и расширения (например, pg_trgm, PostGIS).
+
+ - Совместимость с GORM: полноценно поддерживается ORM-библиотекой в Go, легко подключается и масштабируется.
+
+ - Открытый код и активное сообщество: PostgreSQL развивается как open-source с огромным количеством документации и сообществом поддержки.
 
 ---
 
@@ -99,5 +302,3 @@ docker run -p 4000:4000 myapp
 - Подключение базы данных PostgreSQL. База подготовлена, написан отдельный сервер для взаимодействия. 
 - Интеграция платёжных систем СБП, QR...
 - Хранение истории заказов и пользователей в БД
-
-
