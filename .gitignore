@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 myapp.tar
+project_all.tar
 
 # Editor directories and files
 .vscode/*
