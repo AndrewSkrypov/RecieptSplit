@@ -56,3 +56,4 @@ go_server/go.mod~
 # MacOS-specific
 .AppleDouble
 .LSOverride
+project_all.tar
