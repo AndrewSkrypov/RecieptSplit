@@ -14,14 +14,21 @@ function Register() {
       alert('Пароли не совпадают');
       return;
     }
-    // Here you would typically handle the registration logic
+    
     console.log('Registration submitted:', { email, password });
     navigate('/login');
   };
 
   return (
     <div className="min-h-screen bg-[#f2fff5] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md relative">
+        {/* Аватарка */}
+        <img
+          src="/avatars/avatar7.jpg"
+          alt="котик"
+          className="w-16 h-16 rounded-full absolute top-8 right-8 shadow-md ring-4 ring-green-300"
+        />
+        
         <div className="mb-8">
           <button 
             onClick={() => navigate(-1)}
@@ -33,7 +40,7 @@ function Register() {
         </div>
 
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Создайте аккаунт</h1>
-        <p className="text-gray-600 mb-6">Регистрируйтесь, чтобы начать пользоваться приложением</p>
+        <p className="text-gray-600 mb-6">Зарегистрируйтесь, чтобы начать пользоваться приложением</p>
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">

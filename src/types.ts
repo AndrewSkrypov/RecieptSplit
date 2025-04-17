@@ -6,6 +6,7 @@ export interface User {
   color: string;
   isGuest: boolean;
   tableNumber?: string;
+  avatar: string,
 }
 
 export interface DishItem {
@@ -23,4 +24,10 @@ export interface Bill {
   receiptImage?: string;
   splitMode: 'full' | 'individual' | 'equal' | 'custom';
   total: number;
+}
+
+export interface Dish {
+  id: string;
+  name: string;
+  price: number;
 }

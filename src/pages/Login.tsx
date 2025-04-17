@@ -9,7 +9,7 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the login logic
+    
     console.log('Login submitted:', { email, password });
     navigate('/profile');
   };
@@ -26,9 +26,17 @@ function Login() {
             Назад
           </button>
         </div>
+        <div className="relative mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Вход в аккаунт</h1>
+          <p className="text-gray-500 mt-1">Войдите, чтобы продолжить</p>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Вход в аккаунт</h1>
-        <p className="text-gray-600 mb-6">Войдите, чтобы продолжить</p>
+          <img
+            src="/avatars/avatar3.jpg"
+            alt="котик"
+            className="w-16 h-16 rounded-full absolute right-8 top-1/2 -translate-y-1/2"
+          />
+        </div>
+
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">

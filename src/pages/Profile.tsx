@@ -45,7 +45,7 @@ function Profile() {
         <div className="text-center mb-8">
           <div className="relative inline-block">
             <img
-              src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
+              src="/avatars/avatar5.jpg"
               alt="Profile"
               className="w-24 h-24 rounded-full mx-auto mb-4"
             />
@@ -74,7 +74,7 @@ function Profile() {
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Например: ABC123"
+              placeholder="Например: 123"
               className="flex-1 px-4 py-2 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
             />
             <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
@@ -86,7 +86,7 @@ function Profile() {
         {/* Achievements Section */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-semibold">Achievements</h3>
+            <h3 className="font-semibold">Достижения</h3>
             <button className="text-green-500 text-sm hover:text-green-600">
               Показать все
             </button>
@@ -101,6 +101,13 @@ function Profile() {
             <div className="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center">
               <Trophy size={24} className="text-gray-400" />
             </div>
+            <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+            <img
+              src="/avatars/avatar4.jpg"
+              alt="аватар"
+              className="w-full h-full object-cover"
+            />
+          </div>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
@@ -8,7 +8,9 @@ import PaymentModeScreen from './pages/PaymentModeScreen';
 import TableConnection from './pages/TableConnection';
 import ItemSelectionScreen from './pages/ItemSelectionScreen';
 import useStore from './store/useStore';
-import { disconnect, socket, joinTable } from './services/socket';
+import PaymentScreen from './pages/PaymentScreen';
+import { disconnect, socket } from './services/socket';
+import { RandomPayerScreen } from './pages/RandomPayerScreen';
 
 function App() {
   const { setCurrentUser, setTableNumber } = useStore();
@@ -20,13 +22,19 @@ function App() {
     if (savedUser && savedTable) {
       const user = JSON.parse(savedUser);
       setCurrentUser(user);
-      //socket.connect(); // Только сокет
+      setTableNumber(savedTable);
+  
+      if (!socket.connected) {
+        socket.connect();
+      }
+  
+      socket.emit('join_table', { tableNumber: savedTable, user });
     }
   
     return () => {
       disconnect();
     };
-  }, [setCurrentUser]);
+  }, [setCurrentUser, setTableNumber]);  
 
 
   return (
@@ -38,6 +46,8 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/payment-mode" element={<PaymentModeScreen />} />
       <Route path="/itemselect" element={<ItemSelectionScreen />} />
+      <Route path="/payment" element={<PaymentScreen />} />
+      <Route path="/random" element={<RandomPayerScreen />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

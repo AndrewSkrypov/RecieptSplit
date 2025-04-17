@@ -9,9 +9,12 @@ interface Store {
   activeUsers: User[];
   selectedItems: { [key: string]: DishItem };
   tableNumber: string | null;
+  guestName: string;
   lastUpdate: number;
-  guestName: string; // ✅ Добавляем поле guestName
+  recognizedDishes: DishItem[];
+
   setCurrentUser: (user: User | null) => void;
+  setUserAvatar: (avatar: string) => void;
   addUser: (user: User) => void;
   removeUser: (userId: string) => void;
   setBill: (bill: Bill) => void;
@@ -25,39 +28,77 @@ interface Store {
   cleanupInactiveUsers: () => void;
   syncTableState: (items: DishItem[]) => void;
   setUsers: (users: User[]) => void;
-  setGuestName: (name: string) => void; // ✅ Добавляем метод для guestName
+  setGuestName: (name: string) => void;
+  clearSession: () => void;
+  setRecognizedDishes: (dishes: DishItem[]) => void;
+  clearRecognizedDishes: () => void;
 }
 
 const ACTIVITY_TIMEOUT = 30000;
 
+const savedUser = localStorage.getItem('currentUser');
+const savedTable = localStorage.getItem('tableNumber');
+
 const useStore = create<Store>()(
-  subscribeWithSelector((set) => ({
-    currentUser: null,
+  subscribeWithSelector((set, get) => ({
+    currentUser: savedUser ? JSON.parse(savedUser) : null,
+    tableNumber: savedTable || null,
     users: [],
     bill: null,
     activeUsers: [],
     selectedItems: {},
-    tableNumber: null,
-    guestName: '', // ✅ Инициализируем guestName
+    recognizedDishes: [],
+    guestName: '',
     lastUpdate: Date.now(),
 
-    setGuestName: (name) => // ✅ Добавляем метод setGuestName
-      set(() => ({ guestName: name, lastUpdate: Date.now() })),
+    setGuestName: (name) => set({ guestName: name, lastUpdate: Date.now() }),
 
-    setCurrentUser: (user) =>
+    setCurrentUser: (user) => {
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('currentUser');
+      }
       set((state) => ({
         currentUser: user,
         users: user ? [...state.users.filter((u) => u.id !== user.id), user] : state.users,
         activeUsers: user ? [...state.activeUsers.filter((u) => u.id !== user.id), user] : state.activeUsers,
         lastUpdate: Date.now(),
-      })),
+      }));
+    },
+
+    setUserAvatar: (avatar) =>
+      set((state) => {
+        if (!state.currentUser) return state;
+
+        const updatedUser: User = { ...state.currentUser, avatar };
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+        return {
+          currentUser: updatedUser,
+          users: state.users.map((u) => (u.id === updatedUser.id ? updatedUser : u)),
+          lastUpdate: Date.now(),
+        };
+      }),
+
+    clearSession: () => {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('tableNumber');
+      set({ currentUser: null, tableNumber: null });
+    },
 
     setUsers: (users) =>
-      set(() => ({
-        users,
-        activeUsers: users,
-        lastUpdate: Date.now(),
-      })),
+      set((state) => {
+        const current = state.currentUser;
+        const alreadyIncluded = users.find((u) => u.id === current?.id);
+        const finalUsers = alreadyIncluded || !current ? users : [...users, current];
+        return {
+          users: finalUsers,
+          activeUsers: finalUsers,
+          lastUpdate: Date.now(),
+        };
+      }),
+    
 
     addUser: (user) =>
       set((state) => ({
@@ -79,11 +120,17 @@ const useStore = create<Store>()(
         lastUpdate: Date.now(),
       }),
 
-    setTableNumber: (tableNumber) =>
+    setTableNumber: (tableNumber) => {
+      if (tableNumber) {
+        localStorage.setItem('tableNumber', tableNumber);
+      } else {
+        localStorage.removeItem('tableNumber');
+      }
       set({
         tableNumber,
         lastUpdate: Date.now(),
-      }),
+      });
+    },
 
     assignDishToUser: (dishId, userId, name, price) =>
       set((state) => {
@@ -133,6 +180,7 @@ const useStore = create<Store>()(
         const tipItemId = 'tip_item';
         const updatedItems = { ...state.selectedItems };
         if (amount < 0) amount = 0;
+
         if (amount > 0) {
           updatedItems[tipItemId] = {
             id: tipItemId,
@@ -144,11 +192,12 @@ const useStore = create<Store>()(
         } else {
           delete updatedItems[tipItemId];
         }
+
         return {
           selectedItems: updatedItems,
           lastUpdate: Date.now(),
         };
-      }),      
+      }),
 
     addToSelectedItems: (item) =>
       set((state) => ({
@@ -177,7 +226,9 @@ const useStore = create<Store>()(
     cleanupInactiveUsers: () =>
       set((state) => {
         const now = Date.now();
-        const activeUsers = state.activeUsers.filter((user) => now - state.lastUpdate < ACTIVITY_TIMEOUT);
+        const activeUsers = state.activeUsers.filter(
+          (user) => now - state.lastUpdate < ACTIVITY_TIMEOUT
+        );
         return {
           activeUsers,
           lastUpdate: now,
@@ -192,6 +243,11 @@ const useStore = create<Store>()(
         }, {} as { [key: string]: DishItem }),
         lastUpdate: Date.now(),
       })),
+
+    setRecognizedDishes: (dishes) =>
+      set(() => ({ recognizedDishes: dishes })),
+
+    clearRecognizedDishes: () => set({ recognizedDishes: [] }),
   }))
 );
 

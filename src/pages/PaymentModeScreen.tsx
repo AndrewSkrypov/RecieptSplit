@@ -4,20 +4,36 @@ import {
   Wallet, 
   Users, 
   SplitSquareHorizontal,
-  ListChecks 
+  ListChecks, 
+  SquareDot
 } from 'lucide-react';
 
 function PaymentModeScreen() {
   const navigate = useNavigate();
 
-  const handleModeSelection = (mode: 'full' | 'individual' | 'equal' | 'custom') => {
+  const handleModeSelection2 = () => {
+    console.log('Selected mode: full');
+    navigate('/payment', { state: { fullPayment: true } });
+  };
+
+  const handleModeSelection3 = () => {
+    console.log('Selected mode: lycky');
+    navigate('/random');
+  };
+
+  const handleModeSelection4 = () => {
+    console.log('Selected mode: equal');
+    navigate('/payment', { state: { mode: 'equal' } });
+  };  
+
+  const handleModeSelection = (mode: 'individual' | 'custom') => {
     console.log('Selected mode:', mode);
     navigate('/itemselect');
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#e7fbe9]">
+      <div className="max-w-md w-full space-y-8  p-8 rounded-2xl shadow-xl bg-white">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">
             Как вы хотите разделить чек?
@@ -27,9 +43,9 @@ function PaymentModeScreen() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-3">
           <button
-            onClick={() => handleModeSelection('full')}
+            onClick={handleModeSelection2}
             className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"
           >
             <Wallet className="w-6 h-6 text-purple-600 mr-3" />
@@ -55,7 +71,20 @@ function PaymentModeScreen() {
           </button>
 
           <button
-            onClick={() => handleModeSelection('equal')}
+            onClick={() => handleModeSelection3()}
+            className="flex items-center p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
+          >
+            <SquareDot className="w-6 h-6 text-red-400 mr-3" />
+            <div className="text-left">
+              <h3 className="font-medium text-gray-900">Счастливый выбор</h3>
+              <p className="text-sm text-gray-500">
+                Счастливчик платит
+              </p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleModeSelection4()}
             className="flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
           >
             <Users className="w-6 h-6 text-blue-600 mr-3" />
@@ -73,7 +102,7 @@ function PaymentModeScreen() {
           >
             <SplitSquareHorizontal className="w-6 h-6 text-green-600 mr-3" />
             <div className="text-left">
-              <h3 className="font-medium text-gray-900">Custom Split</h3>
+              <h3 className="font-medium text-gray-900">Выбор категории</h3>
               <p className="text-sm text-gray-500">
                 Разделение продуктов по категориям
               </p>

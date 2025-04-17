@@ -5,7 +5,7 @@ import useStore from '../store/useStore';
 
 function Welcome() {
   const [guestName, setGuestNameLocal] = useState(''); // Локальное состояние
-  const setGuestName = useStore((state) => state.setGuestName); // Zustand
+  const setGuestName = useStore((state) => state.setGuestName);
   const navigate = useNavigate();
 
   const handleGuestSubmit = (e: React.FormEvent) => {
@@ -17,7 +17,16 @@ function Welcome() {
   return (
     <div className="min-h-screen bg-[#f2fff5] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Добро пожаловать!</h1>
+
+      <div className="flex items-center justify-left gap-2 mb-2">
+        <img
+          src="/avatars/avatar1.jpg"
+          alt="котик"
+          className="w-12 h-12 rounded-full"
+        />
+        <h1 className="text-3xl font-bold text-gray-900">Добро пожаловать!</h1>
+      </div>
+
         <p className="text-green-600 mb-8 text-center">Это сервис для удобного деления счёта</p>
         
         <p className="text-gray-600 mb-4 text-center">Выберите как вы хотите продолжить</p>
@@ -49,7 +58,7 @@ function Welcome() {
                 type="text"
                 id="guestName"
                 value={guestName}
-                onChange={(e) => setGuestNameLocal(e.target.value)} // ✅ Теперь поле доступно
+                onChange={(e) => setGuestNameLocal(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-[#fff7e6] border-transparent focus:border-green-500 focus:ring-0"
                 placeholder="Введите ваше имя"
                 required
