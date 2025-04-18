@@ -145,7 +145,6 @@ is a database for storing users and sessions.
 ---
 
 ### In the plans:
-- Connecting the PostgreSQL database. The database has been prepared, and a separate server has been written for interaction. 
 - Integration of payment systems SBP, QR...
 - Storing the history of orders and users in the database
 
@@ -299,6 +298,5 @@ docker-compose up
 ---
 
 ### В планах:
-- Подключение базы данных PostgreSQL. База подготовлена, написан отдельный сервер для взаимодействия. 
 - Интеграция платёжных систем СБП, QR...
 - Хранение истории заказов и пользователей в БД
