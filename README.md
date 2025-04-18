@@ -101,7 +101,7 @@ is a database for storing users and sessions.
 
 
 
-### 📦 Data storage and structure
+### Data storage and structure
 
 - **Zustand**
 - Local status management (selected dishes, current user, tips, recognized dishes, etc.)
@@ -257,7 +257,7 @@ docker-compose up
 
 
 
-### 📦 Хранилище и структура данных
+### Хранилище и структура данных
 
 - **Zustand**
   - Локальное управление состоянием (выбранные блюда, текущий пользователь, чаевые, распознанные блюда и пр.)
