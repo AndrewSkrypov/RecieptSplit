@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import useStore from '../store/useStore';
 import { User, DishItem } from '../types';
 
-export const socket = io('http://192.168.3.15:4000', {
+export const socket = io('http://192.168.3.27:4000', {
   transports: ['websocket'],
   path: '/socket.io',
 });
