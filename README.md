@@ -42,7 +42,7 @@ is a utilitarian CSS framework that allows you to quickly and flexibly style the
 is a lightweight and fast alternative to Redux for global state management.
   - Easy to use, easily expandable, and has native React support.
 
-- **Tesseract.js **
+- **Tesseract.js**
 - OCR (text recognition) from receipt images, which allows users to upload photos and automatically receive a list of dishes.
 
 - **socket.io-client**
@@ -197,6 +197,9 @@ docker-compose up
 
 - **Tesseract.js**
   - OCR (распознавание текста) из изображений чеков, что позволяет пользователям загружать фото и автоматически получать список блюд.
+
+- **Python**
+  - Для подключения в проект более продвинутой версии OCR и лучшего качества распознования. 
 
 - **socket.io-client**
   - Обеспечивает работу в реальном времени: выбор блюд, обновление корзины, синхронизация участников.
